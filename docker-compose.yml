@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+  https:
+    image: caddy:2-alpine
+    restart: always
+    network_mode: host
+    cap_add:
+      - NET_BIND_SERVICE
+    volumes:
+      - /opt/postal-tls/Caddyfile:/etc/caddy/Caddyfile
+      - /opt/postal-tls/caddy-data:/data
+
+  port-465:
+    image: dweomer/stunnel
+    restart: always
+    network_mode: host
+    cap_add:
+      - NET_BIND_SERVICE
+    volumes:
+      - type: bind
+        source: /opt/postal-tls/caddy-data/caddy/certificates/acme-v02.api.letsencrypt.org-directory/${HOST}/${HOST}.crt
+        target: /etc/stunnel/stunnel.pem
+        read_only: true
+      - type: bind
+        source: /opt/postal-tls/caddy-data/caddy/certificates/acme-v02.api.letsencrypt.org-directory/${HOST}/${HOST}.key
+        target: /etc/stunnel/stunnel.key
+        read_only: true
+    environment:
+      STUNNEL_SERVICE: smtps
+      STUNNEL_ACCEPT: 465
+      STUNNEL_CONNECT: 127.0.0.1:25
+
+  port-587:
+    image: alpine/socat
+    restart: always
+    network_mode: host
+    cap_add:
+      - NET_BIND_SERVICE
+    command: "tcp-listen:587,reuseaddr,fork tcp:localhost:25"
