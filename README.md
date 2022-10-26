@@ -30,7 +30,7 @@ smtp_server:
 3. Set the FQDN of the Postal host in the files `.env` and `Caddyfile` and also set your e-mail address in the `Caddyfile` instead of `your@email.com` which is used to identify the owner of the certificate.
 4. Still in the `/opt/postal-tls` now run `docker compose up https` and wait a while until Caddy gets the certificates, then exit via CTRL-C
 5. Create a symlink `sudo ln -s /opt/postal-tls/caddy-data /opt/postal/caddy-data` and set the permissions of directory `sudo find /opt/postal-tls/caddy-data -type d -exec chmod 755 {} +` and files `sudo find /opt/postal-tls/caddy-data -type f -exec chmod 644 {} +`
-6. Add the volume with certificates `/opt/postal/caddy-data:/caddy-data` to the Postal smtp service in `/opt/postal/install-docker.yml`.
+6. Add the volume with certificates `/opt/postal/caddy-data:/caddy-data` to the Postal smtp service in `/opt/postal/install/docker-compose.yml`.
 7. This step is not necessary, but for the sake of clarity we can delete the Caddyfile offered by Postal `sudo rm /opt/postal/config/Caddyfile` and link a working one `sudo ln -s /opt/postal-tls/Caddyfile /opt/postal/config/Caddyfile` and remove .git directory `sudo rm -r /opt/postal-tls/.git` and .gitignore file `sudo rm -r /opt/postal-tls/.gitignore`
 8. Stop Postal via `postal stop` and start Postal via `postal start`, which will now start with StartTLS support on port 25.
 9. Still in the working directory `/opt/postal-tls` start the postal-tls Docker Compose project via `docker compose up -d` and you're done 🎉
