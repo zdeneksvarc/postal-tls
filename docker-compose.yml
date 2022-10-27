@@ -27,6 +27,7 @@ services:
         target: /etc/stunnel/stunnel.key
         read_only: true
     environment:
+      STUNNEL_DEBUG: 4
       STUNNEL_SERVICE: smtps
       STUNNEL_ACCEPT: 465
       STUNNEL_CONNECT: 127.0.0.1:25
