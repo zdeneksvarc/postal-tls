@@ -50,4 +50,4 @@ smtp_server:
 - Postal does not support [ECC](https://en.wikipedia.org/wiki/Elliptic-curve_cryptography) certificates, but these are default for Caddy v2. Therefore, an explicit `{ key_type rsa4096 }` directive is used in the Caddyfile to force Caddy to use [RSA](https://simple.wikipedia.org/wiki/RSA_algorithm) certificates.
 - Postal internal services also run as Docker Compose project, but are handled by the `/usr/bin/postal` wrapper.
 - It's okay to be cautious about the trustworthiness of public docker images. If you consider it better, you can build the image of each of the three services used yourself.
-- Restarter is Docker outside of Docker service which restarts Postal and Stunnel once every ten days to re-load certificate.
+- Restarter is Docker outside of Docker service which restarts Postal and Stunnel once every ten days to reload certificate.
