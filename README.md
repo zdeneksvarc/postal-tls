@@ -6,7 +6,7 @@ The Postal delivery platform does not offer encrypted services in the basic inst
 
 Components of the deployment:
 
-- [Caddy 2](https://hub.docker.com/_/caddy) web server used for automated certificate management and HTTPS reverse proxy.
+- [Caddy 2](https://hub.docker.com/_/caddy) web server used for automated ACME certificate management and HTTPS reverse proxy. We use [Let's Encrypt](https://letsencrypt.org) HTTP-01 challenge type.
 - [Stunnel](https://hub.docker.com/r/dweomer/stunnel/) for implicit TLS termination on port 465. This is the preferred method of mail submission, see [RFC8314](https://www.rfc-editor.org/rfc/rfc8314)
 - [Socat](https://hub.docker.com/r/alpine/socat/) for mirroring ports 587 and 25, which is running StartTLS directly from Postal.
 - Restarter is [Docker outside of Docker](https://hub.docker.com/_/docker) service which restarts Postal SMTP and Stunnel once every ten days to reload certificate.
