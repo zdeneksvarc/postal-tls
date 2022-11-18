@@ -9,6 +9,7 @@ Components of the deployment:
 - [Caddy 2](https://hub.docker.com/_/caddy) web server used for automated certificate management and HTTPS reverse proxy.
 - [Stunnel](https://hub.docker.com/r/dweomer/stunnel/) for implicit TLS termination on port 465. This is the preferred method of mail submission, see [RFC8314](https://www.rfc-editor.org/rfc/rfc8314)
 - [Socat](https://hub.docker.com/r/alpine/socat/) for mirroring ports 587 and 25, which is running StartTLS directly from Postal.
+- Restarter is [Docker outside of Docker](https://hub.docker.com/_/docker) service which restarts Postal SMTP and Stunnel once every ten days to reload certificate.
 
 ## Pre-requisites
 
@@ -50,4 +51,3 @@ smtp_server:
 - Postal does not support [ECC](https://en.wikipedia.org/wiki/Elliptic-curve_cryptography) certificates, but these are default for Caddy v2. Therefore, an explicit `{ key_type rsa4096 }` directive is used in the Caddyfile to force Caddy to use [RSA](https://simple.wikipedia.org/wiki/RSA_algorithm) certificates.
 - Postal internal services also run as Docker Compose project, but are handled by the `/usr/bin/postal` wrapper.
 - It's okay to be cautious about the trustworthiness of public docker images. If you consider it better, you can build the image of each of the three services used yourself.
-- Restarter is Docker outside of Docker service which restarts Postal and Stunnel once every ten days to reload certificate.
