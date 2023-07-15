@@ -6,10 +6,9 @@ The Postal delivery platform does not offer encrypted services in the basic inst
 
 Components of the deployment:
 
-- [Caddy 2](https://hub.docker.com/_/caddy) web server used for automated ACME certificate management and HTTPS reverse proxy. [Let's Encrypt](https://letsencrypt.org) HTTP-01 challenge type is preconfigured.
+- [Caddy 2](https://hub.docker.com/_/caddy) web server used for automated certificate management and HTTPS reverse proxy.
 - [Stunnel](https://hub.docker.com/r/dweomer/stunnel/) for implicit TLS termination on port 465. This is the preferred method of mail submission, see [RFC8314](https://www.rfc-editor.org/rfc/rfc8314)
 - [Socat](https://hub.docker.com/r/alpine/socat/) for mirroring ports 587 and 25, which is running StartTLS directly from Postal.
-- Restarter is [Docker outside of Docker](https://hub.docker.com/_/docker) service which restarts Postal SMTP and Stunnel once every ten days to reload certificate.
 
 ## Pre-requisites
 
@@ -17,7 +16,7 @@ Installed Postal according to the [official instructions](https://docs.postalser
 
 ## Installation procedure
 
-1. Edit configuration file `/opt/postal/config/postal.yml` adding [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) of the Postal host (for example `postal.example.com`) instead of `<HOST>`
+1. Suppose the directory for installed Postal is `/opt/postal`. Edit configuration file `/opt/postal/config/postal.yml` adding [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) of the Postal host (for example `postal.example.com`) instead of `<HOST>`
 
 ```
 smtp_server:
@@ -27,10 +26,10 @@ smtp_server:
   tls_private_key_path: /caddy-data/caddy/certificates/acme-v02.api.letsencrypt.org-directory/<HOST>/<HOST>.key
 ```
 
-2. Working directory will be `/opt/caddy-tls`, so do `cd /opt`, fetch the install repository `sudo git clone https://github.com/zdeneksvarc/postal-tls.git` and set working directory `cd /opt/postal-tls`
-3. Set the FQDN of the Postal host in the files `.env` and `Caddyfile` and also set your e-mail address in the `Caddyfile` instead of `your@email.com` which is used to identify the owner of the certificate.
-4. Still in the `/opt/postal-tls` now run `docker compose up https` and wait a while until Caddy gets the certificates, then exit via CTRL-C
-5. Create a symlink `sudo ln -s /opt/postal-tls/caddy-data /opt/postal/caddy-data` and set the permissions of directory `sudo find /opt/postal-tls/caddy-data -type d -exec chmod 755 {} +` and files `sudo find /opt/postal-tls/caddy-data -type f -exec chmod 644 {} +`
+2. Suppose the directory for postal-tls will be `/opt/caddy-tls`. Change the working directory `cd /opt`. Fetch the install repository `sudo git clone https://github.com/zdeneksvarc/postal-tls.git`. Jump to the new working directory `cd /opt/postal-tls`
+3. Set the FQDN of the Postal host in the files `.env` and `Caddyfile`. Also set your e-mail address in the `Caddyfile` instead of `your@email.com` which is used to identify the owner of the certificate.
+4. Still in the `/opt/postal-tls` now run `docker compose up https` and wait a while until Caddy gets the certificates. Then exit via CTRL-C
+5. Create a symlink `sudo ln -s /opt/postal-tls/caddy-data /opt/postal/caddy-data` and set permissions of directory `sudo find /opt/postal-tls/caddy-data -type d -exec chmod 755 {} +` and set permissions of files `sudo find /opt/postal-tls/caddy-data -type f -exec chmod 644 {} +`
 6. Add the volume with certificates `/opt/postal/caddy-data:/caddy-data` to the Postal smtp service in `/opt/postal/install/docker-compose.yml`.
 7. This step is not necessary, but for the sake of clarity we can delete the Caddyfile offered by Postal `sudo rm /opt/postal/config/Caddyfile` and link a working one `sudo ln -s /opt/postal-tls/Caddyfile /opt/postal/config/Caddyfile` and remove .git directory `sudo rm -r /opt/postal-tls/.git` and .gitignore file `sudo rm -r /opt/postal-tls/.gitignore`
 8. Stop Postal via `postal stop` and start Postal via `postal start`, which will now start with StartTLS support on port 25.
