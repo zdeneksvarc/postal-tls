@@ -16,7 +16,7 @@ Installed Postal according to the [official instructions](https://docs.postalser
 
 ## Installation procedure
 
-1. Suppose the directory for installed Postal is `/opt/postal`. Edit configuration file `/opt/postal/config/postal.yml` adding [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) of the Postal host (for example `postal.example.com`) instead of `<HOST>`
+1. Suppose the directory for installed Postal is `/opt/postal`. Edit configuration file `/opt/postal/config/postal.yml` adding [FQDN](https://en.wikipedia.org/wiki/Fully_qualified_domain_name) of the Postal host (for example `postal.example.com`) instead of `<HOST>` in the smtp_server section:
 
 ```
 smtp_server:
