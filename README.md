@@ -2,7 +2,7 @@
 
 **❗ This repository runs with the Postal [version 2.1.2](https://github.com/postalserver/postal/releases). It should be fine for version 2.1.x maybe 2.x**
 
-The Postal delivery platform does not offer encrypted services in the basic installation. That is certificate management, HTTPS interface, mail submission via oportunistic TLS (StartTLS) and implicit TLS. Deploying this repository via Docker Compose will provide these services.
+The Postal mail delivery platform does not offer encrypted services in the basic installation. That is certificate management, HTTPS interface, mail submission via oportunistic TLS (StartTLS) and implicit TLS. Deploying this repository via Docker Compose will provide these services.
 
 Components of the deployment:
 
